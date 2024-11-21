@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Kevin Chen</title>
+	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+</head>
+<body>
+	<main>
+		<div id="modal" class="flex-col">
+			<nav>
+				<a href="./" class="ul" id="home-link">Kevin Chen</a>, 
+				<a href="">Projects</a>, 
+				<a href="#information" id="info-link">Information</a>
+			</nav>
+			<div id="info" class="pgroup">
+				<p>Currently Art Director at <a href="">HYPEBEAST</a></p>
+				<a href="">heykevinchen@gmail.com</a>
+				<a href="">@bagelbiteskevin</a>
+			</div>
+			<div id="info-full" style="display:none;" class="flex-col">
+				<p>
+					Kevin Chen is a NY based Art Director and Graphic Designer. Currently specializing in art direction, campaign creative production, identity design, branding and web design. Clients include brands, artists and cultural institutions. With every project he partners with a revolving team of artists, designers, photographers, filmmakers, developers to bring new concepts to life.
+				</p>
+				<div class="pgroup-hori-col">
+					<p class="pgroup">
+						Services
+						<span>Art Direction</span>
+						<span>Creative Strategy</span>
+						<span>Digital Design</span>
+						<span>Exhibition Design</span>
+						<span>Identity</span>
+						<span>Photo Illustration + AI</span>
+						<span>Social Strategy</span>
+						<span>Websites</span>
+					</p>
+					<p class="pgroup">
+						Clients
+						<span>Porsche</span>
+						<span>Nike</span>
+						<span>New Balance</span>
+						<span>Asics</span>
+						<span>Versace</span>
+						<span>About-Face</span>
+						<span>Moon Boot</span>
+						<span>Universal Music Group.</span>
+					</p>
+				</div>
+			</div>
+			
+			<div class="pgroup-hori" id="currentlyViewing">
+				<div id="blinker"></div>
+				<p style="font-variant-numeric: proportional-nums;">
+					<span id="index"></span>
+					<span>/</span>
+					<span id="total"></span>
+				</p> 
+				<a href="" class="ul" id="projName">Casio 50th Anniversary @HBX</a>
+			</div>
+			<p>All images © <span id="copyright-year"></span> Kevin Chen</p>
+			<script type="text/javascript">
+				document.getElementById("copyright-year").innerHTML = new Date().getFullYear();
+			</script>
+		</div>
+		<section class="project" data-projName="Casio 50th Anniversary @HBX">
+			<img src="assets/images/figma1.webp">
+		</section>
+		<section class="project" data-projName="Casio 50th Anniversary @HBX">
+			<img src="assets/images/figma2.webp">
+		</section>
+		<section class="project" data-projName="Porsche Electric Art">
+			<img src="assets/images/figma14.webp">
+		</section>
+		<section class="project" data-projName="Converse Style Index Zine">
+			<img src="assets/images/figma11.webp">
+		</section>
+		<section class="project" data-projName="Canada Goose x A Bathing Ape Lookbook">
+			<img src="assets/images/figma9.webp">
+		</section>
+	</main>
+
+	<div id="page-overlay">
+		<p>Kevin Chen, Projects, Information</p>
+	</div>
+	<script>
+		const pageOverlay = document.querySelector('#page-overlay');
+		const pageOverlayText = pageOverlay.querySelector('p');
+		setTimeout(() => {
+		  pageOverlay.classList.add('hidden-2sec');
+		  pageOverlayText.classList.add('hidden-1sec');
+		}, 2000);
+	</script>
+
+
+	<script>
+		const infoLink = document.querySelector('#info-link');
+		const homeLink = document.querySelector('#home-link');
+		const infoFull = document.getElementById('info-full');
+		const navLinks = document.querySelectorAll('nav a');
+
+		const view = document.querySelector('#currentlyViewing');
+		const view_index = view.querySelector('#index');
+		const view_total = view.querySelector('#total');
+		const view_project = view.querySelector('#projName')
+
+		// Function to check if the URL contains the anchor and display content
+		function showInfoFromAnchor() {
+			if (window.location.hash === '#information') {
+				onlyOneNavLink(infoLink)
+				infoFull.style.display = 'flex';
+			}
+		}
+
+		// Toggle visibility of the info section on click
+		infoLink?.addEventListener('click', function() {
+		  const isHidden = (infoFull.style.display === 'none' || !infoFull.style.display);
+		  if(isHidden){
+		  	onlyOneNavLink(infoLink)
+		  	infoFull.style.display = "flex";
+		  }else{
+		  	onlyOneNavLink(homeLink)
+		  	infoFull.style.display = "none"
+		  	
+		  	window.history.go(-1)
+		  }
+		  infoLink.classList.toggle('ul', isHidden);
+		});
+
+		// only show one link with underline from <nav>
+		function onlyOneNavLink(selected){
+			// remove all underlines from nav
+			navLinks.forEach(link => {
+				link.classList.remove('ul');
+			})
+			// Add underline to the selected link
+			selected.classList.add('ul');
+		}
+
+		// Run the function on page load to check if the anchor is present
+		window.addEventListener('DOMContentLoaded', showInfoFromAnchor);
+
+
+
+
+		// intersection observer
+
+
+		let observer = new IntersectionObserver(observeImgs, {
+			root: null,   // default is the viewport
+			threshold: 0.5 // percentage of target's visible area
+		},)
+		
+		function observeImgs(entries, opts){
+			entries.forEach(entry => {
+				// Project
+				let allProj = document.querySelectorAll('section.project');
+				let currentProj = entry.target;
+				let projectName = currentProj.getAttribute('data-projName');
+				let posterImg = entry.target.querySelector('img')
+				let index = [ ...allProj ].indexOf(currentProj) + 1;
+
+				
+
+
+				if(entry.isIntersecting){
+					console.log(index + " / " + allProj.length + ", " +posterImg.src);
+					view_index.innerHTML = index;
+					view_total.innerHTML = allProj.length;
+					view_project.innerHTML = projectName;
+
+					// let allPrevious = document.querySelectorAll('.currentIndex');
+					// if(allPrevious !== null){
+					// 	allPrevious.forEach((previous)=>{
+					// 		previous.classList.remove('currentIndex');
+					// 	})
+					// }
+
+					// indexIs.classList.add('currentIndex');
+					// captionIs.innerHTML = caption;
+				}
+		
+			})
+		}
+		
+		document.querySelectorAll('section.project').forEach((entry) => {
+			observer.observe(entry);
+		});
+	</script>
+</body>
+</html>
